@@ -1,26 +1,30 @@
-﻿/* Email Google Spreadsheet as PDF */
-function emailGoogleSpreadsheetAsPDF() {
+﻿/* Automatic E-mail of Google Spreadsheet as PDF attachment */
+// This function currently sends the whole spreadsheet as one PDF file
+// Needs the Spreadsheet and Drive APIs
+
+function EmailSpreadSheetasPDF() {
   
-  // Send the PDF of the spreadsheet to this email address
+  // E-mail to send the spreadsheet as PDF attachment
   var email = "camayorquina@unal.edu.co"; 
   
-  // Get the currently active spreadsheet URL (link)
+  // Current spreadsheet
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  // Subject of email message
+  // Subject
   var subject = "PDF generated from spreadsheet " + ss.getName(); 
 
-  // Email Body can  be HTML too 
+  // E-mail body
   var body = "Whatever.";
   
-  var blob = DriveApp.getFileById(ss.getId()).getAs("application/pdf");
+  // 
+  var container = DriveApp.getFileById(ss.getId()).getAs("application/pdf");
   
-  blob.setName(ss.getName() + ".pdf");
+  container.setName(ss.getName() + ".pdf");
   
-  // If allowed to send emails, send the email with the PDF attachment
+  // Will need permission to send the E-mail
   if (MailApp.getRemainingDailyQuota() > 0) 
     GmailApp.sendEmail(email, subject, body, {
       htmlBody: body,
-      attachments:[blob]     
+      attachments:[container]     
     });  
 }
